@@ -1,0 +1,108 @@
+body {
+  color: white;
+  background: black;
+}
+
+#file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 30px;
+}
+
+
+#image {
+  width: 300px;
+  border: solid;
+  margin-bottom: 50px;
+}
+
+#predictions {
+  display: initial;
+  list-style: none;
+  border: solid;
+  width: 300px;
+  margin: auto;
+  padding: 0;
+}
+
+#predictions li {
+  padding: 5px;
+}
+
+.upload {
+  margin-top: 100px;
+}
+
+.upload__button {
+  border: solid;
+  padding: 20px;
+  display: flex;
+  width: 100px;
+  margin: auto;
+  justify-content: center;
+  border-radius: 20px;
+}
+
+button {
+  width: 200px;
+  background: black;
+  color: white;
+  padding: 20px;
+  margin: auto;
+  border: solid 2px;
+  border-radius: 20px;
+  margin-top: 30px;
+}
+
+.upload__prompt {
+  margin-top: 30px;
+}
+
+.material-icons.md-18 {
+  font-size: 18px;
+}
+
+.material-icons.md-24 {
+  font-size: 24px;
+}
+
+.material-icons.md-36 {
+  font-size: 36px;
+}
+
+.material-icons.md-48 {
+  font-size: 48px;
+}
+
+.spinner {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: rgb(156, 228, 255);
+  margin: auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <title>Dog Scope</title>
+  </head>
+  <body>
+    <div class="container">
+      <div id="preview">
+        <img id="image" style="display: none;" />
+      </div>
+      <div class="spinner" id="spinner" style="display: none;"></div>
+      <div class="upload" id="upload">
+        <input type="file" name="file" id="file" class="inputfile" />
+        <label for="file" class="upload__button">
+          <i class="material-icons md-48">camera_alt</i>
+        </label>
+        <div class="upload__prompt">
+          Find a Dog
+        </div>
+      </div>
+      <button class="action load" id="load" style="display: none;">
+        Load model
+      </button>
+      <button class="action predict" id="predict" style="display: none;">
+        Identify Breed
+      </button>
+      <ul class="predictions" id="predictions" style="display: none;"></ul>
+    </div>
+  </body>
+  <script src="script.js"></script>
+</html>
