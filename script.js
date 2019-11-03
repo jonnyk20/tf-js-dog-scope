@@ -11,15 +11,11 @@ const preditionsContainer = document.getElementById("predictions");
 
 let model;
 
-const fakeRequest = () =>
-  new Promise((resolve, reject) => {
-    setTimeout(() => resolve(["cat", "dog"]), 1000);
-  });
-
 const handleUpload = event => {
   const { files } = event.target;
   if (files.length > 0) {
-    const imageUrl = URL.createObjectURL(event.target.files[0]);
+    const file = event.target.files[0];
+    const imageUrl = URL.createObjectURL(file);
     image.src = imageUrl;
     hide(upload);
     show(image);
@@ -30,7 +26,7 @@ const handleUpload = event => {
 const loadModel = async () => {
   show(spinner);
   hide(loadModelButton);
-  model = await fakeRequest();
+  model = await mobilenet.load();
   hide(spinner);
   show(predictButton);
 };
@@ -38,7 +34,10 @@ const loadModel = async () => {
 const makePrecitions = async () => {
   show(spinner);
   hide(predictButton);
-  const predictions = await fakeRequest();
+  let predictions = await model.classify(image)
+  if (predictions.length === 0) {
+    predictions.push({ className: 'unknown '})
+  }
   hide(spinner);
   show(preditionsContainer);
   renderPrecitions(predictions);
@@ -46,11 +45,13 @@ const makePrecitions = async () => {
 
 const renderPrecitions = predictions => {
   predictions.forEach(prediction => {
+    console.log('PRED', prediction)
     el = document.createElement("li");
-    el.innerText = prediction;
+    el.innerText = prediction.className;
     preditionsContainer.appendChild(el);
   });
 };
+
 
 input.onchange = handleUpload;
 loadModelButton.onclick = loadModel;
