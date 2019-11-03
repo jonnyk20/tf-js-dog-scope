@@ -20,7 +20,7 @@ body {
 }
 
 
-#image {
+#preview img, #preview canvas {
   width: 300px;
   border: solid;
   margin-bottom: 50px;
