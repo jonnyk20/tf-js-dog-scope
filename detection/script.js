@@ -1,6 +1,6 @@
 const hide = el => (el.style.display = "none");
 const show = el => (el.style.display = "initial");
-const formatClassAndScore = (label, score) => `${label}: %${score.toFixed(2) * 100}`
+const formatClassAndScore = (label, score) => `${label}: %${(score * 100).toFixed(2)}`
 
 const preview = document.getElementById("preview");
 const image = document.getElementById("image");
@@ -53,8 +53,8 @@ const renderBoxes = () => {
   detections.forEach(({  bbox, class: label, score }) => {
     const [boxX, boxY, boxW, boxH] = bbox;
     ctx.lineWidth = 2
-    ctx.fillStyle = "red"
-    ctx.strokeStyle = "red"
+    ctx.fillStyle = "green"
+    ctx.strokeStyle = "green"
     ctx.rect(boxX, boxY, boxW, boxH)
   })
   ctx.stroke()
@@ -86,12 +86,13 @@ const classifyBox = async detection => {
   return { ...detection, label }
 }
 
-const renderClassificatins = detectedAndClassifiedObjects => {
+const renderClassifications = detectedAndClassifiedObjects => {
   const ctx = imageCanvas.getContext('2d')
   detectedAndClassifiedObjects.forEach(({ label, bbox }) => {
     const [boxX, boxY] = bbox;
     ctx.fillText(label, boxX + 20, boxY + 20)
   })
+  hide(spinner)
 }
 
 const makePrecitions = async () => {
@@ -101,7 +102,7 @@ const makePrecitions = async () => {
   renderCanvas()
   renderBoxes()
   const classifications = await Promise.all(detections.map(classifyBox))
-  renderClassificatins(classifications)
+  renderClassifications(classifications)
 };
 
 const classifyImage = async () => {
