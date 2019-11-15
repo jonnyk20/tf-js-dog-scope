@@ -14,6 +14,7 @@ const spinner = document.getElementById("spinner");
 const input = document.getElementById("file");
 const preditionsContainer = document.getElementById("predictions");
 
+let classificationModel;
 let detectionModel;
 let imageCanvas
 let detections = [];
@@ -33,6 +34,7 @@ const handleUpload = event => {
 const loadModels = async () => {
   show(spinner);
   hide(loadModelButton);
+  classificationModel = await mobilenet.load();
   detectionModel = await cocoSsd.load();
   hide(spinner);
   show(predictButton);
@@ -51,15 +53,49 @@ const renderCanvas = () => {
 
 const renderBoxes = () => {
   const ctx = imageCanvas.getContext('2d')
-  detections.forEach(({  bbox, class: label }) => {
+  detections.forEach(({  bbox, class: label, score }) => {
     const [boxX, boxY, boxW, boxH] = bbox;
     ctx.lineWidth = 2
     ctx.fillStyle = "green"
     ctx.strokeStyle = "green"
     ctx.rect(boxX, boxY, boxW, boxH)
-    ctx.fillText(label, boxX + 20, boxY + 20)
   })
   ctx.stroke()
+}
+
+const classifyBox = async detection => {
+  const { width: imgW, height: imgH } = image;
+  const { height: imageCanvasH, width: imageCanvasW } = imageCanvas;
+  const [boxX, boxY, boxW, boxH] = detection.bbox;
+  const widthScale = imgW / imageCanvasW
+  const heightScale = imgH / imageCanvasH
+
+  const croppedCanvas = document.createElement('canvas')
+  const A = boxX * widthScale// x
+  const B = boxY * heightScale// y
+  const C = imgW // w original
+  const D = imgH // h original
+  const E = 0
+  const F = 0
+  const G = imageCanvasW // w original (scale)
+  const H = imageCanvasH // h original (scale)
+  const ctx = croppedCanvas.getContext("2d")
+  croppedCanvas.height = boxH // cropH
+  croppedCanvas.width = boxW // cropW
+  ctx.drawImage(image, A, B, C, D, E, F, G, H)
+  const classfications = await classificationModel.classify(croppedCanvas)
+  const { className, probability } = classfications[0];
+  const label = formatClassAndScore(className, probability)
+  return { ...detection, label }
+}
+
+const renderClassifications = detectedAndClassifiedObjects => {
+  const ctx = imageCanvas.getContext('2d')
+  detectedAndClassifiedObjects.forEach(({ label, bbox }) => {
+    const [boxX, boxY] = bbox;
+    ctx.fillText(label, boxX + 20, boxY + 20)
+  })
+  hide(spinner)
 }
 
 const detect = async () => {
@@ -68,7 +104,8 @@ const detect = async () => {
   detections = filterDogs(await detectionModel.detect(image))
   renderCanvas()
   renderBoxes()
-  hide(spinner)
+  const classifications = await Promise.all(detections.map(classifyBox))
+  renderClassifications(classifications)
 };
 
 const renderPrecitions = predictions => {
@@ -78,7 +115,6 @@ const renderPrecitions = predictions => {
     preditionsContainer.appendChild(el);
   });
 };
-
 
 input.onchange = handleUpload;
 loadModelButton.onclick = loadModels;
