@@ -54,8 +54,8 @@ const renderBoxes = () => {
   detections.forEach(({  bbox, class: label }) => {
     const [boxX, boxY, boxW, boxH] = bbox;
     ctx.lineWidth = 2
-    ctx.fillStyle = "green"
-    ctx.strokeStyle = "green"
+    ctx.fillStyle = "white"
+    ctx.strokeStyle = "white"
     ctx.rect(boxX, boxY, boxW, boxH)
     ctx.fillText(label, boxX + 20, boxY + 20)
   })
