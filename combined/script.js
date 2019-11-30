@@ -56,6 +56,8 @@ const renderBoxes = () => {
   detections.forEach(({  bbox, class: label, score }) => {
     const [boxX, boxY, boxW, boxH] = bbox;
     ctx.lineWidth = 2
+    ctx.fillStyle = "#00000059"
+    ctx.fillRect(boxX, boxY, boxW, boxH)
     ctx.fillStyle = "white"
     ctx.strokeStyle = "white"
     ctx.rect(boxX, boxY, boxW, boxH)
@@ -93,7 +95,7 @@ const renderClassifications = detectedAndClassifiedObjects => {
   const ctx = imageCanvas.getContext('2d')
   detectedAndClassifiedObjects.forEach(({ label, bbox }) => {
     const [boxX, boxY] = bbox;
-    ctx.fillText(label, boxX + 20, boxY + 20)
+    ctx.fillText(label, boxX + 10, boxY + 20)
   })
   hide(spinner)
 }

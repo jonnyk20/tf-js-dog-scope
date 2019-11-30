@@ -51,13 +51,13 @@ const renderCanvas = () => {
 
 const renderBoxes = () => {
   const ctx = imageCanvas.getContext('2d')
-  detections.forEach(({  bbox, class: label }) => {
+  detections.forEach(({  bbox, class: label, score }) => {
     const [boxX, boxY, boxW, boxH] = bbox;
     ctx.lineWidth = 2
     ctx.fillStyle = "white"
     ctx.strokeStyle = "white"
     ctx.rect(boxX, boxY, boxW, boxH)
-    ctx.fillText(label, boxX + 20, boxY + 20)
+    ctx.fillText(formatClassAndScore(label, score), boxX + 20, boxY + 20)
   })
   ctx.stroke()
 }
